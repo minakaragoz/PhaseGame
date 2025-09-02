@@ -1,0 +1,148 @@
+[gd_scene load_steps=19 format=3 uid="uid://b7sw7iq8krca4"]
+
+[ext_resource type="Script" uid="uid://xi6b4crnohhq" path="res://Player.gd" id="1_wbfu4"]
+[ext_resource type="Texture2D" uid="uid://4jnevgqomq8t" path="res://sprites/GamePhasePics/liquid.png" id="2_3mrqo"]
+[ext_resource type="Texture2D" uid="uid://w37vhb552jig" path="res://sprites/GamePhasePics/solid.png" id="3_joorw"]
+[ext_resource type="Texture2D" uid="uid://de42oobdx3k5d" path="res://sprites/GamePhasePics/gas.png" id="4_2vekm"]
+[ext_resource type="Script" uid="uid://dktkwi6uhwxj8" path="res://Vent.gd" id="5_yx171"]
+[ext_resource type="Texture2D" uid="uid://j74toj57erwu" path="res://sprites/GamePhasePics/vent/vent0.png" id="6_yhmtn"]
+[ext_resource type="Texture2D" uid="uid://cvdacuifvo26d" path="res://sprites/GamePhasePics/vent/vent1.png" id="7_gwjdr"]
+[ext_resource type="Texture2D" uid="uid://cbun6cokmhrdj" path="res://sprites/pixil-frame-0.png" id="8_joorw"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lvtmh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_2vekm")
+}],
+"loop": true,
+"name": &"GAS",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_3mrqo")
+}],
+"loop": true,
+"name": &"LIQUID",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_joorw")
+}],
+"loop": true,
+"name": &"SOLID",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yyih5"]
+radius = 71.197
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qjyg3"]
+radius = 10.9882
+height = 33.9757
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_elkpi"]
+radius = 42.9535
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3mrqo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_yhmtn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_gwjdr")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3mrqo"]
+size = Vector2(1473.7, 294.574)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3mrqo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_joorw"]
+size = Vector2(1453, 58)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2vekm"]
+texture = ExtResource("8_joorw")
+
+[sub_resource type="TileSet" id="TileSet_yx171"]
+sources/0 = SubResource("TileSetAtlasSource_2vekm")
+
+[node name="Node2D" type="Node2D"]
+rotation = -0.000331846
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -4096
+offset_left = -102.0
+offset_top = -52.0
+offset_right = 1348.0
+offset_bottom = 750.0
+color = Color(0.942974, 0.914451, 0.402984, 1)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+rotation = -0.00688032
+collision_mask = 2
+script = ExtResource("1_wbfu4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
+position = Vector2(-0.999985, -0.00721741)
+scale = Vector2(0.336275, 0.365183)
+sprite_frames = SubResource("SpriteFrames_lvtmh")
+animation = &"SOLID"
+
+[node name="CollisionShape2D_Solid" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_yyih5")
+
+[node name="CollisionShape2D_Liquid" type="CollisionShape2D" parent="Player"]
+rotation = 0.0313638
+shape = SubResource("CapsuleShape2D_qjyg3")
+disabled = true
+
+[node name="CollisionShape2D_Gas" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_elkpi")
+disabled = true
+
+[node name="Vent" type="AnimatedSprite2D" parent="."]
+script = ExtResource("5_yx171")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Vent"]
+position = Vector2(13.8012, 599.005)
+scale = Vector2(0.444923, -0.343582)
+sprite_frames = SubResource("SpriteFrames_3mrqo")
+
+[node name="WindArea" type="Area2D" parent="Vent"]
+position = Vector2(60.002, -5.98009)
+scale = Vector2(2.02965, 0.89755)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vent/WindArea"]
+position = Vector2(295.872, 677.177)
+rotation = 0.0254157
+scale = Vector2(0.431734, 0.552781)
+shape = SubResource("RectangleShape2D_3mrqo")
+
+[node name="Door" type="AnimatedSprite2D" parent="."]
+position = Vector2(-8, 1)
+
+[node name="Floor" type="StaticBody2D" parent="."]
+scale = Vector2(0.999995, 1.00207)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+modulate = Color(0.0196078, 1, 1, 1)
+self_modulate = Color(0.0392157, 1, 1, 1)
+visibility_layer = 3
+material = SubResource("ShaderMaterial_3mrqo")
+position = Vector2(621.5, 721)
+rotation = 0.00778586
+shape = SubResource("RectangleShape2D_joorw")
+debug_color = Color(0.934311, 0.237781, 0.25355, 0.42)
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_yx171")
+format = 2
